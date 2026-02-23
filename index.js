@@ -1,14 +1,33 @@
 require('dotenv').config();
 const express = require('express');
-const connectDB = require('./config/db.js'); // Sirf upar hi rehne dein
+const helmet = require('helmet');
+const connectDB = require('./config/db.js');
 const seedSuperAdmin = require('./utils/seedAdmin');
 const cors = require('cors');
 const path = require('path');
 
 const app = express();
 
+// --- Security Middleware ---
+app.use(helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
+}));
+
 // --- 1. Middlewares ---
-app.use(cors({ origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'] }));
+// Restrict CORS for production - replace '*' with your frontend domain
+const allowedOrigins = process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['*'];
+app.use(cors({
+    origin: function(origin, callback) {
+        if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
