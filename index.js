@@ -39,6 +39,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/teacher', require('./routes/teacherRoutes'));
 app.use('/api/student', require('./routes/studentRoutes'));
+app.use('/api/fees', require('./routes/feeRoutes'));
 
 app.get('/api/test-connection', (req, res) => res.json({ success: true, message: "Connected!" }));
 app.get('/', (req, res) => res.send("Tuition SaaS Server is Running!"));

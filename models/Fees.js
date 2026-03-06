@@ -41,6 +41,31 @@ const FeesSchema = new mongoose.Schema({
         type: String,
         trim: true,
         default: "Monthly Fees"
+    },
+    // Payment method: 'CASH', 'ONLINE', 'RAZORPAY', 'UPI', etc.
+    paymentMethod: {
+        type: String,
+        enum: ['CASH', 'ONLINE', 'RAZORPAY', 'UPI', 'CARD', 'OTHER'],
+        default: 'CASH'
+    },
+    // Razorpay specific fields
+    razorpayPaymentId: {
+        type: String,
+        trim: true
+    },
+    razorpayOrderId: {
+        type: String,
+        trim: true
+    },
+    razorpaySignature: {
+        type: String,
+        trim: true
+    },
+    // Payment status
+    paymentStatus: {
+        type: String,
+        enum: ['PENDING', 'COMPLETED', 'FAILED', 'REFUNDED'],
+        default: 'COMPLETED'
     }
 }, { 
     timestamps: true // Isse 'createdAt' aur 'updatedAt' apne aap mil jayenge
